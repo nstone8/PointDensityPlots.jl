@@ -1,6 +1,6 @@
 module PointDensityPlots
 
-using RecipesBase, Statistics
+using RecipesBase
 
 """
 ```julia
