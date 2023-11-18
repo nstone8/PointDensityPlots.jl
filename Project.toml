@@ -1,7 +1,7 @@
 name = "PointDensityPlots"
 uuid = "9f67d30b-7d66-4ece-951a-d199622dd275"
 authors = ["Nicholas Stone <nicholasestone@proton.me>"]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 RecipesBase = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"

@@ -43,7 +43,7 @@ function pointdensity end
     xscale := xscale
     yscale := yscale
     marker_z := densitycounts
-    markerstrokecolor --> false
+    markerstrokewidth --> 0
     markersize --> .5
     legend --> false
     colorbar --> false
