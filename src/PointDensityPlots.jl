@@ -12,7 +12,10 @@ other points. `binradius` is the normalized distance used when judging proximity
 function pointdensity end
 
 @shorthands pointdensity
-@recipe function pointdensity(::Type{Val{:pointdensity}}, ox, oy, oz;xscale=:identity,yscale=:identity,binradius = 0.01)
+@recipe function pointdensity(::Type{Val{:pointdensity}}, ox, oy, oz)
+    xscale --> :log10
+    yscale --> :log10
+    binradius --> 0.05
     @assert all(size(ox) .== size(oy))
     scales=Dict(:identity => (a) -> a,
                 :ln => log,
@@ -20,10 +23,10 @@ function pointdensity end
                 :log10 => log10,
                 :asinh => asinh,
                 :sqrt => sqrt)
-
+    
     #do our colors based on the scaled data
-    xscaled=scales[xscale].(ox)
-    yscaled=scales[xscale].(oy)
+    xscaled=scales[plotattributes[:xscale]].(ox)
+    yscaled=scales[plotattributes[:yscale]].(oy)
     
     rangex = maximum(xscaled) - minimum(xscaled)
     rangey = maximum(yscaled) - minimum(yscaled)
@@ -35,13 +38,11 @@ function pointdensity end
         ydist = (this_y .- yscaled)/rangey
         dist = sqrt.(xdist.^2 + ydist.^2)
         dc = sum(dist) do d
-            (d < binradius) ? 1 : 0
+            (d < plotattributes[:binradius]) ? 1 : 0
         end
         return dc
     end
     seriestype := :scatter
-    xscale := xscale
-    yscale := yscale
     marker_z := densitycounts
     markerstrokewidth --> 0
     markersize --> .5
