@@ -16,20 +16,31 @@ function logiclescale(data,ls,excludeticks)
 
     #decide what ticks we're going to want
     dmin = minimum(data)
-    signdmin = sign(dmin)
-    #gotta deal with dmin being negative
-    minpower = signdmin*floor(Int,signdmin*dmin |> log10)
+    if iszero(dmin)
+        #first tick a little below our minimum
+        minpower = -1
+    else
+        signdmin = sign(dmin)
+        #gotta deal with dmin being negative
+        minpower = signdmin*floor(Int,signdmin*dmin |> log10)
+    end
     dmax = maximum(data)
-    #don't think our maximum values will ever be negative, but might as well...
-    signdmax = sign(dmax)
-    maxpower = signdmax*ceil(Int,signdmax*dmax |> log10)
+    if iszero(dmax)
+        #last tick a little above our maximum
+        maxpower = 1
+    else
+        #don't think our maximum values will ever be negative, but might as well...
+        signdmax = sign(dmax)
+        maxpower = signdmax*ceil(Int,signdmax*dmax |> log10)
+    end
     tickvec = []
     for power in minpower:maxpower
         if iszero(power)
             push!(tickvec,[0,L"0"])
-        else
-            push!(tickvec,[10^power,L"10^%$(Int(power))"])
         end
+        
+        push!(tickvec,[10^power,L"10^%$(Int(power))"])
+        
         minorvals = collect(1:9)
         if power<0
             #need to count up
